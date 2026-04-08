@@ -36,6 +36,7 @@ import { useAppState } from "../../state/AppState.js";
 import { getEffortSuffix } from "../../utils/effort.js";
 import { useMainLoopModel } from "../../hooks/useMainLoopModel.js";
 import { renderModelSetting } from "../../utils/model/model.js";
+import { getActiveProviderReasoningEffort } from "../../utils/model/customProviders.js";
 const LEFT_PANEL_MAX_WIDTH = 50;
 function LogoV2() {
   const $ = _c(94);
@@ -151,6 +152,7 @@ function LogoV2() {
   useEffect(t7, t8);
   const model = useMainLoopModel();
   const fullModelDisplayName = renderModelSetting(model);
+  const providerReasoningEffort = getActiveProviderReasoningEffort(model);
   const {
     version,
     cwd,
@@ -159,7 +161,8 @@ function LogoV2() {
   } = getLogoDisplayData();
   const agentName = agent ?? agentNameFromSettings;
   const effortSuffix = getEffortSuffix(model, effortValue);
-  const t9 = fullModelDisplayName + effortSuffix;
+  const providerReasoningSuffix = providerReasoningEffort ? ` · ${providerReasoningEffort}` : "";
+  const t9 = fullModelDisplayName + providerReasoningSuffix + effortSuffix;
   let t10;
   if ($[13] !== t9) {
     t10 = truncate(t9, LEFT_PANEL_MAX_WIDTH - 20);

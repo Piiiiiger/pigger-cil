@@ -357,6 +357,19 @@ function getActiveProviderModelLabel(model) {
   }
   return formatProviderModelLabel(active.provider.name, active.model);
 }
+function getActiveProviderReasoningEffort(model) {
+  if (!model) {
+    return null;
+  }
+  const active = getActiveInferenceProviderConfig();
+  if (!active || active.provider.format !== "openai") {
+    return null;
+  }
+  if (active.model !== model) {
+    return null;
+  }
+  return active.provider.reasoningEffort ?? null;
+}
 function saveInferenceProvider(provider) {
   const normalizedProvider = normalizeProvider({
     id: provider.id ?? randomUUID(),
@@ -494,6 +507,7 @@ export {
   getActiveInferenceProviderSelection,
   getCodexBackedOpenAIProviderConfig,
   getActiveOpenAIProviderConfig,
+  getActiveProviderReasoningEffort,
   getActiveProviderModelLabel,
   getEnvBackedOpenAIProviderConfig,
   getInferenceProvider,

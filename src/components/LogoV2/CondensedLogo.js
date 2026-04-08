@@ -11,6 +11,7 @@ import { truncate } from "../../utils/format.js";
 import { isFullscreenEnvEnabled } from "../../utils/fullscreen.js";
 import { formatModelAndBilling, getLogoDisplayData, truncatePath } from "../../utils/logoV2Utils.js";
 import { renderModelSetting } from "../../utils/model/model.js";
+import { getActiveProviderReasoningEffort } from "../../utils/model/customProviders.js";
 import { OffscreenFreeze } from "../OffscreenFreeze.js";
 import { AnimatedClawd } from "./AnimatedClawd.js";
 import { Clawd } from "./Clawd.js";
@@ -25,6 +26,7 @@ function CondensedLogo() {
   const effortValue = useAppState(_temp2);
   const model = useMainLoopModel();
   const modelDisplayName = renderModelSetting(model);
+  const providerReasoningEffort = getActiveProviderReasoningEffort(model);
   const {
     version,
     cwd,
@@ -72,11 +74,12 @@ function CondensedLogo() {
   const textWidth = Math.max(columns - 15, 20);
   const truncatedVersion = truncate(version, Math.max(textWidth - 13, 6));
   const effortSuffix = getEffortSuffix(model, effortValue);
+  const providerReasoningSuffix = providerReasoningEffort ? ` · ${providerReasoningEffort}` : "";
   const {
     shouldSplit,
     truncatedModel,
     truncatedBilling
-  } = formatModelAndBilling(modelDisplayName + effortSuffix, billingType, textWidth);
+  } = formatModelAndBilling(modelDisplayName + providerReasoningSuffix + effortSuffix, billingType, textWidth);
   const cwdAvailableWidth = agentName ? textWidth - 1 - stringWidth(agentName) - 3 : textWidth;
   const truncatedCwd = truncatePath(cwd, Math.max(cwdAvailableWidth, 10));
   let t4;
